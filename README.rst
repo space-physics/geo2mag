@@ -2,7 +2,7 @@
 geo2mag
 =======
 
-Convert geodetic coordinates to geomagnetic coordinates
+Convert geodetic coordinates to geomagnetic coordinates, using the `hosted algorithm <http://wdc.kugi.kyoto-u.ac.jp/igrf/gggm/index.html>`_
 
 
 installation

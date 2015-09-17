@@ -3,6 +3,10 @@
 Loads .kmz file of sites, finds geomagnetic coordinates of sites
 using http://wdc.kugi.kyoto-u.ac.jp/igrf/gggm/index.html
 Michael Hirsch
+
+ref:
+http://pubs.usgs.gov/of/1999/ofr-99-0503/REPORT.HTM
+
 """
 from zipfile import ZipFile
 from pykml import parser
@@ -11,6 +15,7 @@ from pandas import read_html,DataFrame,read_excel,read_hdf
 from numpy import asarray
 from time import sleep
 from os.path import splitext
+from matplotlib.pyplot import figure,show
 
 kmperdeglat = 111
 
@@ -101,6 +106,45 @@ def writesites(fn,lla):
     elif ext == '.h5':
         lla.to_hdf(fn,'sites')
 
+def plotgeomag(lla):
+    ax = figure().gca()
+    for n,l in lla.iterrows():
+        if n[:3] == 'HST':
+            c='red'
+        elif n == 'PFISR':
+            c='blue'
+        else:
+            c='black'
+        ax.scatter(l['mlon'],l['mlat'],s=180,facecolors='none',edgecolors=c)
+    ax.set_xlabel('magnetic longitude [deg.]')
+    ax.set_ylabel('magnetic latitude [deg.]')
+    ax.grid(True)
+    ax.set_title('Sites vs. GeoMagnetic coordinates')
+    for lon,lat,n in zip(lla['mlon'],lla['mlat'],lla.index):
+        try:
+            ax.text(lon,lat,n[-2:],ha='center',va='center',fontsize=8)
+        except ValueError:
+            pass
+#%%
+    ax = figure().gca()
+    for n,l in lla.iterrows():
+        if n[:3] == 'HST':
+            c='red'
+        elif n == 'PFISR':
+            c='blue'
+        else:
+            c='black'
+        ax.scatter(l['glon'],l['glat'],s=180,facecolors='none',edgecolors=c)
+    ax.set_xlabel('geodetic longitude [deg.]')
+    ax.set_ylabel('geodetic latitude [deg.]')
+    ax.grid(True)
+    ax.set_title('Sites vs. Geodetic coordinates')
+    for lon,lat,n in zip(lla['glon'],lla['glat'],lla.index):
+        try:
+            ax.text(lon,lat,n[-2:],ha='center',va='center',fontsize=8)
+        except ValueError:
+            pass
+    ax.invert_xaxis()
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
@@ -114,4 +158,6 @@ if __name__ == '__main__':
     lla,Dmlat_deg,Dglat_km = compdelta(lla)
 
     writesites(p.ofn,lla)
+
+    plotgeomag(lla)
 

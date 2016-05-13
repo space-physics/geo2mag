@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Placemark>
+   <name>Bora-Bora Airport</name>
+   <Point>
+     <coordinates>-151.752044,-16.443118</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+   <name>Chatanika, AK</name>
+   <Point>
+     <coordinates>-148,65,0</coordinates>
+   </Point>
+  </Placemark>
+</kml>

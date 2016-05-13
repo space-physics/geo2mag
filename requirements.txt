@@ -2,4 +2,3 @@ html5lib
 requests
 pandas
 dateutil
-xlwt

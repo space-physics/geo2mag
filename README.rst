@@ -9,8 +9,7 @@ Installation
 ============
 ::
 
-  pip install pykml
-  conda install --file requirements.txt
+    python setup.py develop
 
 Usage
 =====

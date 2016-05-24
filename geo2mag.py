@@ -10,7 +10,6 @@ http://pubs.usgs.gov/of/1999/ofr-99-0503/REPORT.HTM
 
 """
 from pathlib import Path
-from io import BytesIO
 from zipfile import ZipFile
 from pykml import parser
 import requests

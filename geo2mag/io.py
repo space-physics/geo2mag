@@ -1,30 +1,42 @@
+from __future__ import unicode_literals
 from . import Path
 from zipfile import ZipFile
-from pykml import parser
-from pandas import DataFrame
-from numpy import asarray
+from fastkml import kml
+from pandas import DataFrame,read_excel
+from numpy import asarray,genfromtxt
+
+def loadsites(fn):
+    """
+    txt/csv/xls/xlsx file should be arranged Nx3, lat, lon, alt each row
+    """
+    fn = Path(fn).expanduser()
+
+    ext = fn.suffix
+
+    if ext in   ('.txt', '.csv'):
+        return genfromtxt(fn, delimiter=',',usecols=(0,1))
+    elif ext in ('.xls', '.xlsx'):
+        return read_excel(fn,parse_cols=[0,1]).values
+    elif ext in ('.kml', '.kmz'):
+        return loadkml(fn)
 
 def loadkml(fn):
     fn = Path(fn)
 
     latlon=[]
     names = []
-    if fn.endswith('z'):
+    if fn.suffix=='.kmz':
         z = ZipFile(str(fn),'r').open('doc.kml','r').read()
-    else:
+    else: #.kml
         z = fn.open('r').read()
 
-    root= parser.fromstring(z)
-    try:
-        R=root.Document.Folder.Placemark
-    except AttributeError:
-        R=root.Placemark
+    k = kml.KML()
+    k.from_string(z)
 
-    for P in R:
+    for P in k.features():
         try:
-            C = P.Point.coordinates.text.split(sep=',')[:2][::-1]
-            latlon.append(C)
-            names.append(P.name.text)
+            latlon.append(P.geometry.coords[0][:2][::-1])
+            names.append(P.name)
         except AttributeError:
             pass
 

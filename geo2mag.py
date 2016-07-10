@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 Loads site file, finds geomagnetic coordinates of sites
 file can be xls(x), kml,kmz, h5
@@ -9,22 +9,21 @@ ref:
 http://pubs.usgs.gov/of/1999/ofr-99-0503/REPORT.HTM
 
 """
-from pathlib import Path
-from zipfile import ZipFile
-from pykml import parser
 import requests
 from pandas import read_html,DataFrame,read_excel
-from numpy import asarray,ndarray,genfromtxt,atleast_2d
+from numpy import ndarray,genfromtxt,atleast_2d
 from time import sleep
-from matplotlib.pyplot import figure,show
-
+#
+from geo2mag import Path
+from geo2mag.io import loadkml
+#
 kmperdeglat = 111
 
 def loadsites(fn):
     """
     txt/csv/xls/xlsx file should be arranged Nx3, lat, lon, alt each row
     """
-    fn = str(Path(fn).expanduser())
+    fn = Path(fn).expanduser()
 
     if fn.endswith('.txt') or fn.endswith('.csv'):
         return genfromtxt(fn, delimiter=',',usecols=(0,1))
@@ -55,32 +54,6 @@ def loopcoord(latlon):
         page = geo2mag(l['glat'],l['glon'])
         latlon.at[n,'mlat'],latlon.at[n,'mlon'] = geomag_table(page)
     return latlon
-
-def loadkml(fn:str):
-    latlon=[]
-    names = []
-    if fn.endswith('z'):
-        z = ZipFile(fn,'r').open('doc.kml','r').read()
-    else:
-        z = open(fn,'r').read()
-
-    root= parser.fromstring(z)
-    try:
-        R=root.Document.Folder.Placemark
-    except AttributeError:
-        R=root.Placemark
-
-    for P in R:
-        try:
-            C = P.Point.coordinates.text.split(sep=',')[:2][::-1]
-            latlon.append(C)
-            names.append(P.name.text)
-        except AttributeError:
-            pass
-
-    return DataFrame(data=asarray(latlon).astype(float),
-                     columns=['glat','glon'],
-                     index=names)
 
 def geo2mag(glat,glon):
     sleep(1) #don't hammer the server
@@ -119,68 +92,17 @@ def geomag_table(page):
 
     return mlat,mlon #float must be above for - operator
 
-def compdelta(latlon:DataFrame):
+def compdelta(latlon):
+    assert isinstance(latlon,DataFrame)
     latlon.sort_values(by=['mlat','glat'],inplace=True)
     Dmlat_deg = latlon['mlat'].diff()
     Dglat_km = latlon['glat'].diff()*kmperdeglat
     return latlon,Dmlat_deg,Dglat_km
 
-def plotgeomag(lla):
-    ax = figure().gca()
-    for n,l in lla.iterrows():
-        if isinstance(n,str):
-            if n[:3] == 'HST':
-                c='red'
-            elif n == 'PFISR':
-                c='blue'
-            else:
-                c='black'
-        else:
-            c=None
-
-        ax.scatter(l['mlon'],l['mlat'],s=180,facecolors='none',edgecolors=c)
-
-    ax.set_xlabel('magnetic longitude [deg.]')
-    ax.set_ylabel('magnetic latitude [deg.]')
-    ax.grid(True)
-    ax.set_title('Sites vs. GeoMagnetic coordinates')
-    for lon,lat,n in zip(lla['mlon'],lla['mlat'],lla.index):
-        try:
-            ax.text(lon,lat,n,ha='center',va='center',fontsize=8)
-        except ValueError:
-            pass
-
-    ax.get_xaxis().get_major_formatter().set_useOffset(False)
-    ax.get_yaxis().get_major_formatter().set_useOffset(False)
-#%%
-    ax = figure().gca()
-    for n,l in lla.iterrows():
-        if isinstance(n,str):
-            if n[:3] == 'HST':
-                c='red'
-            elif n == 'PFISR':
-                c='blue'
-            else:
-                c='black'
-        else:
-            c=None
-
-        ax.scatter(l['glon'],l['glat'],s=180,facecolors='none',edgecolors=c)
-
-    ax.set_xlabel('geodetic longitude [deg.]')
-    ax.set_ylabel('geodetic latitude [deg.]')
-    ax.grid(True)
-    ax.set_title('Sites vs. Geodetic coordinates')
-    for lon,lat,n in zip(lla['glon'],lla['glat'],lla.index):
-        try:
-            ax.text(lon,lat,n,ha='center',va='center',fontsize=8)
-        except ValueError:
-            pass
-
-    ax.get_xaxis().get_major_formatter().set_useOffset(False)
-    ax.get_yaxis().get_major_formatter().set_useOffset(False)
-
 if __name__ == '__main__':
+    from matplotlib.pyplot import show
+    from geo2mag.plots import plotgeomag
+    #
     from argparse import ArgumentParser
     p = ArgumentParser(description='read site data and convert geographic/geodetic coordinates to geomagnetic coordinates')
     g = p.add_mutually_exclusive_group(required=True)

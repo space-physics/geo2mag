@@ -4,4 +4,4 @@ beautifulsoup4
 html5lib
 requests
 pandas
-dateutil
+python-dateutil

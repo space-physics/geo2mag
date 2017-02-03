@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-from . import Path
+from pathlib import Path
 from zipfile import ZipFile
 from fastkml import kml
 from pandas import DataFrame,read_excel
@@ -26,7 +26,7 @@ def loadkml(fn):
     latlon=[]
     names = []
     if fn.suffix=='.kmz':
-        z = ZipFile(str(fn),'r').open('doc.kml','r').read()
+        z = ZipFile(fn,'r').open('doc.kml','r').read()
     else: #.kml
         z = fn.open('r').read()
 

@@ -51,7 +51,7 @@ def geomag_table(page):
     elif s[-1] == 'S':
         mlat = -float(s[:-1])
     else:
-        raise ValueError('I expected N or S but got {}'.format(s[-1]))
+        raise ValueError(f'I expected N or S but got {s[-1]}')
 
     s = tab.at['Geomagnetic','Longitude']
     if s[-1] == 'W':
@@ -59,6 +59,6 @@ def geomag_table(page):
     elif s[-1] == 'E':
         mlon = float(s[:-1])
     else:
-        raise ValueError('I expected E or W but got {}'.format(s[-1]))
+        raise ValueError(f'I expected E or W but got {s[-1]}')
 
     return mlat,mlon #float must be above for - operator

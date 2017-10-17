@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-req = ['numpy','lxml','beautifulsoup4','html5lib','requests','pandas','python-dateutil']
+req = ['nose','numpy','lxml','beautifulsoup4','html5lib', 'requests', 'pandas', 'python-dateutil']
 pipreq=['fastkml']
 
 import pip

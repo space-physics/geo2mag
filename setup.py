@@ -1,13 +1,21 @@
 #!/usr/bin/env python
-from setuptools import setup
+req = ['numpy','lxml','beautifulsoup4','html5lib','requests','pandas','python-dateutil']
+pipreq=['fastkml']
+
+import pip
 try:
     import conda.cli
-    conda.cli.main('install','--file','requirements.txt')
+    conda.cli.main('install',*req)
 except Exception as e:
-    print(e)
+    pip.main(['install'] + req)
+pip.main(['install'] + pipreq)
 
+# %%
+from setuptools import setup
 
 setup(name='geo2mag',
-      install_requires=['fastkml'],
       packages=['geo2mag'],
+      install_requires=req+pipreq,
+      author="Michael Hirsch, Ph.D.",
+      url="https://github.com/scivision/geo2mag",
 	  )

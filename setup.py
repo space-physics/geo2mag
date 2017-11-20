@@ -8,4 +8,5 @@ setup(name='geo2mag',
       install_requires=req,
       author="Michael Hirsch, Ph.D.",
       url="https://github.com/scivision/geo2mag",
+      python_requires='>=3.6',
 	  )

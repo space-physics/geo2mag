@@ -1,12 +1,17 @@
 #!/usr/bin/env python
-req = ['nose','numpy','lxml','beautifulsoup4','html5lib', 'requests', 'pandas', 'python-dateutil','fastkml']
+install_requires = ['numpy','requests', 'pandas','lxml'] # lxml <-- pandas.read_html
+tests_require = ['nose',]
 # %%
 from setuptools import setup,find_packages
 
 setup(name='geo2mag',
       packages=find_packages(),
-      install_requires=req,
+      python_requires='>=3.6',
+      install_requires=install_requires,
+      extras_require={'tests':tests_require,
+                      'io':['fastkml'],
+                      'plot':['matplotlib']},
+      tests_require=tests_require,
       author="Michael Hirsch, Ph.D.",
       url="https://github.com/scivision/geo2mag",
-      python_requires='>=3.6',
 	  )

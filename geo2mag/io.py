@@ -1,9 +1,9 @@
 from __future__ import unicode_literals
 from pathlib import Path
 from zipfile import ZipFile
-from fastkml import kml
 from pandas import DataFrame,read_excel
 from numpy import asarray,genfromtxt
+
 
 def loadsites(fn):
     """
@@ -16,11 +16,14 @@ def loadsites(fn):
     if ext in   ('.txt', '.csv'):
         return genfromtxt(fn, delimiter=',',usecols=(0,1))
     elif ext in ('.xls', '.xlsx'):
-        return read_excel(fn,parse_cols=[0,1]).values
+        return read_excel(fn, parse_cols=[0,1]).values
     elif ext in ('.kml', '.kmz'):
         return loadkml(fn)
 
+
 def loadkml(fn):
+    from fastkml import kml
+
     fn = Path(fn)
 
     latlon=[]

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-install_requires = ['numpy','requests', 'pandas','lxml'] # lxml <-- pandas.read_html
+install_requires = ['numpy','requests', 'pandas','lxml','xarray'] # lxml <-- pandas.read_html
 tests_require = ['nose','coveralls']
 # %%
 from setuptools import setup,find_packages

@@ -1,3 +1,11 @@
+.. image:: https://travis-ci.org/scivision/geo2mag.svg?branch=master
+    :target: https://travis-ci.org/scivision/geo2mag
+.. image:: https://coveralls.io/repos/github/scivision/geo2mag/badge.svg?branch=master
+    :target: https://coveralls.io/github/scivision/geo2mag?branch=master
+.. image:: https://api.codeclimate.com/v1/badges/1f9596de34d1741ebc67/maintainability
+   :target: https://codeclimate.com/github/scivision/geo2mag/maintainability
+   :alt: Maintainability
+
 =======
 geo2mag
 =======

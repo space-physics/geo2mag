@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-install_requires = ['numpy','requests', 'pandas','lxml','html5lib','xarray'] 
-# lxml,html5lib <-- pandas.read_html
+install_requires = ['numpy','requests', 'pandas','lxml','html5lib','beautifulsoup4','xarray'] 
+# lxml,html5lib,beautifulsoup4 <-- pandas.read_html
 tests_require = ['nose','coveralls']
 # %%
 from setuptools import setup,find_packages

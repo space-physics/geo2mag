@@ -14,10 +14,8 @@ git:
   depth: 3
 
 
-install: pip install -e .[tests]
+install: python -m pip install -e .[tests]
 
-script: nosetests tests/test.py -v
+script: coverage run tests/test.py -v
 
-after_success: 
-  - coverage run tests/test.py -v
-  - coveralls
+after_success: coveralls

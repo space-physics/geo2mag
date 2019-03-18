@@ -2,17 +2,18 @@ import logging
 try:
     from matplotlib.pyplot import figure
     import cartopy.crs as ccrs
-except (ImportError,RuntimeError) as e:
+except (ImportError, RuntimeError) as e:
     logging.error(f'plotting disabled    {e}')
     figure = None
 
+
 def _sitecol(l):
     if l.name == 'HST':
-        c='red'
+        c = 'red'
     elif l.name == 'PFISR':
-        c='blue'
+        c = 'blue'
     else:
-        c='black'
+        c = 'black'
 
     return c
 
@@ -31,8 +32,8 @@ def plotgeomag(latlon):
     ax.grid(True)
     ax.set_title('Geomagnetic')
     for l in latlon:
-        ax.text(l.loc['mlon'],l.loc['mlat'], l.site.item(),
-                ha='center',va='center',fontsize=8)
+        ax.text(l.loc['mlon'], l.loc['mlat'], l.site.item(),
+                ha='center', va='center', fontsize=8)
 
     ax.get_xaxis().get_major_formatter().set_useOffset(False)
     ax.get_yaxis().get_major_formatter().set_useOffset(False)
@@ -45,5 +46,5 @@ def plotgeomag(latlon):
                    s=180, facecolors='none', edgecolors=_sitecol(l),
                    transform=ccrs.Geodetic())
 
-    ax.set_extent((latlon.loc[:,'glon'].min(), latlon.loc[:,'glon'].max(),
-                   latlon.loc[:,'glat'].min(), latlon.loc[:,'glat'].max()))
+    ax.set_extent((latlon.loc[:, 'glon'].min(), latlon.loc[:, 'glon'].max(),
+                   latlon.loc[:, 'glat'].min(), latlon.loc[:, 'glat'].max()))

@@ -32,7 +32,9 @@ def loadsites(fn: Path, year: int, out: str = 'geodetic') -> pandas.DataFrame:
     elif fn.suffix in ('.kml', '.kmz'):
         latlon = _loadkml(fn)
 
-    return tag(year, latlon[:, 0], latlon[:, 1], out)
+    tagged = tag(latlon[:, 0], latlon[:, 1], year, out)
+
+    return tagged
 
 
 def _loadkml(fn: Path) -> np.ndarray:
@@ -45,7 +47,7 @@ def _loadkml(fn: Path) -> np.ndarray:
     if fn.suffix == '.kmz':
         z = ZipFile(fn, 'r').open('doc.kml', 'r').read()
     else:  # .kml
-        z = fn.open('r').read()
+        z = fn.read_bytes()
 
     k = kml.KML()
     k.from_string(z)
@@ -57,4 +59,4 @@ def _loadkml(fn: Path) -> np.ndarray:
         except AttributeError:
             pass
 
-    return np.asarray(latlon).astype(float)
+    return np.asarray(latlon)

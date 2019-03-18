@@ -37,10 +37,13 @@ def tag(lat: float, lon: float, year: int, out: str) -> pandas.DataFrame:
     lon = np.atleast_1d(lon).astype(float)
     year = np.atleast_1d(year)
 
+    nans = np.empty_like(lat)
+    nans = nans.fill(np.nan)
+
     if out == 'm' or out.startswith('geomag'):
-        coords = (lat, lon, np.empty_like(lat), np.empty_like(lat), year)
+        coords = (lat, lon, nans, nans, year)
     elif out == 'g' or out == 'geodetic':
-        coords = (np.empty_like(lat), np.empty_like(lat), lat, lon, year)
+        coords = (nans, nans, lat, lon, year)
 
     latlon = pandas.DataFrame(np.column_stack(coords),
                               columns=['glat', 'glon', 'mlat', 'mlon', 'year'])
@@ -66,7 +69,7 @@ def convert(latlon: Sequence[float], out: str) -> pandas.DataFrame:
         converted data
     """
     if isinstance(latlon, pandas.DataFrame):
-        assert latlon.ndim == 2 and latlon.shape[1] == 4
+        assert latlon.ndim == 2 and latlon.shape[1] == 5
     elif isinstance(latlon, (tuple, list)):
         latlon = tag(*latlon, out)
     elif isinstance(latlon, np.ndarray):

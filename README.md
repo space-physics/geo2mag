@@ -13,6 +13,11 @@ http://wdc.kugi.kyoto-u.ac.jp/igrf/gggm/index.html
 python -m pip install -e .
 ```
 
+Optional: If you wish to plot maps, consider installing CartoPy like:
+```sh
+conda install cartopy
+```
+
 ## Usage
 
 This program reads coordinates from file or command line.
@@ -36,7 +41,9 @@ python GeomagConvert.py 2015 -c 65.56 -96.46 geodetic
 Convert .KMZ file containing geodetic coordinates to geomagnetic
 coordinates:
 
-    ./geo2mag.py 2017 -f test/test.kmz
+```sh
+python GeomagConvert.py 2015 -f tests/example.kml
+```
 
 or likewise with a CSV or XLS file.
 

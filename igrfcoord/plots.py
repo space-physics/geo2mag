@@ -9,10 +9,10 @@ except (ImportError, RuntimeError) as e:
     figure = None
 
 
-def _sitecol(l):
-    if l.name == "HST":
+def _sitecol(line: pandas.Series) -> str:
+    if line.name == "HST":
         c = "red"
-    elif l.name == "PFISR":
+    elif line.name == "PFISR":
         c = "blue"
     else:
         c = "black"

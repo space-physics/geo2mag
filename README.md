@@ -1,6 +1,6 @@
 # Geographic &harr; Geomagnetic Coordinate Conversion
 
-[![Build Status](https://travis-ci.org/scivision/igrfcoord.svg?branch=master)](https://travis-ci.org/scivision/igrfcoord)
+[![Build Status](https://travis-ci.org/space-physics/igrfcoord.svg?branch=master)](https://travis-ci.org/space-physics/igrfcoord)
 
 Convert geodetic coordinates to geomagnetic coordinates, using the UNENCRYPTED
 connection to IGRF web service:

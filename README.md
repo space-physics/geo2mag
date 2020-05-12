@@ -1,7 +1,6 @@
-[![Build Status](https://travis-ci.org/scivision/igrfcoord.svg?branch=master)](https://travis-ci.org/scivision/igrfcoord)
-[![Coverage Status](https://coveralls.io/repos/github/scivision/igrfcoord/badge.svg?branch=master)](https://coveralls.io/github/scivision/igrfcoord?branch=master)
-
 # Geographic &harr; Geomagnetic Coordinate Conversion
+
+[![Build Status](https://travis-ci.org/scivision/igrfcoord.svg?branch=master)](https://travis-ci.org/scivision/igrfcoord)
 
 Convert geodetic coordinates to geomagnetic coordinates, using the UNENCRYPTED
 connection to IGRF web service:
@@ -14,6 +13,7 @@ python -m pip install -e .
 ```
 
 Optional: If you wish to plot maps, consider installing CartoPy like:
+
 ```sh
 conda install cartopy
 ```
@@ -34,8 +34,6 @@ python GeomagConvert.py 2015 -c 65.56 -96.46 geodetic
 
 > 65.004 -147.994
 
-
-
 ### Read coords from file
 
 Convert .KMZ file containing geodetic coordinates to geomagnetic
@@ -46,5 +44,3 @@ python GeomagConvert.py 2015 -f tests/example.kml
 ```
 
 or likewise with a CSV or XLS file.
-
-

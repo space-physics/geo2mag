@@ -27,12 +27,12 @@ from igrfcoord import convert
 
 
 def main():
-    p = ArgumentParser(description=' convert coordinates: geographic/geodetic <=> geomagnetic')
-    p.add_argument('year', help='year', type=int)
+    p = ArgumentParser(description=" convert coordinates: geographic/geodetic <=> geomagnetic")
+    p.add_argument("year", help="year", type=int)
     g = p.add_mutually_exclusive_group()
-    g.add_argument('-c', '--latlon', help='latitude, longitude', type=float, nargs=2)
-    g.add_argument('-f', '--fn', help='data file')
-    p.add_argument('out', help='do you want "geomag" or "geodetic" output?')
+    g.add_argument("-c", "--latlon", help="latitude, longitude", type=float, nargs=2)
+    g.add_argument("-f", "--fn", help="data file")
+    p.add_argument("out", help='do you want "geomag" or "geodetic" output?')
     P = p.parse_args()
 
     if P.fn:
@@ -47,11 +47,11 @@ def main():
         show()
     else:
         C = convert((*P.latlon, P.year), P.out)
-        if P.out == 'geomag':
-            print(C['mlat'].item(), C['mlon'].item())
+        if P.out == "geomag":
+            print(C["mlat"].item(), C["mlon"].item())
         else:
-            print(C['glat'].item(), C['glon'].item())
+            print(C["glat"].item(), C["glon"].item())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

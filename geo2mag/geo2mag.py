@@ -11,7 +11,7 @@ def geo2mag(glat: float, glon: float) -> T.Tuple[float, float]:
     geomagnetic models like WMM, IGRF, etc.
 
     Latitudes and longitudes (east, 0..360) are expressed in degrees.
-    They may be SCALAR or LIST or 1D numpy.ndarray
+    They may be SCALAR, LIST or Numpy.ndarray (any shape and rank)
 
     > geo2mag(79.3,288.59) == pytest.approx([89.999992, -173.02325])
 
@@ -42,10 +42,14 @@ def geo2mag(glat: float, glon: float) -> T.Tuple[float, float]:
     glon = np.radians(glon)
     galt = R
 
-    if glat.ndim not in (0, 1) or glon.ndim not in (0, 1):
-        raise ValueError("Must have scalar, list, or 1D numpy.ndarray input")
+    # %% handle array shape
+    glat_shape = glat.shape
+    glon_shape = glon.shape
 
-    # convert to rectangular coordinates
+    glat = glat.ravel()
+    glon = glon.ravel()
+
+    # %% convert to rectangular coordinates
     #       X-axis: defined by the vector going from Earth's center towards
     #            the intersection of the equator and Greenwitch's meridian.
     #       Z-axis: axis of the geographic poles
@@ -54,7 +58,8 @@ def geo2mag(glat: float, glon: float) -> T.Tuple[float, float]:
     y = galt * np.cos(glat) * np.sin(glon)
     z = galt * np.sin(glat)
 
-    # Compute 1st rotation matrix : rotation around plane of the equator,
+    # %% Compute 1st rotation matrix
+    # rotation around plane of the equator,
     # from the Greenwich meridian to the meridian containing the magnetic
     # dipole pole.
     geolong2maglong = np.zeros((3, 3))
@@ -65,7 +70,8 @@ def geo2mag(glat: float, glon: float) -> T.Tuple[float, float]:
     geolong2maglong[2, 2] = 1.0
     out = geolong2maglong.T @ np.array([x, y, z])
 
-    # Second rotation : in the plane of the current meridian from geographic
+    # %% Second rotation
+    # in the plane of the current meridian from geographic
     #                  pole to magnetic dipole pole.
     tomaglat = np.zeros((3, 3))
     tomaglat[0, 0] = np.cos(np.pi / 2 - Dlat)
@@ -75,14 +81,14 @@ def geo2mag(glat: float, glon: float) -> T.Tuple[float, float]:
     tomaglat[1, 1] = 1.0
     out = tomaglat.T @ out
 
-    # convert back to latitude, longitude and altitude
+    # %% convert back to latitude, longitude and altitude
     mlat = np.arctan2(out[2], np.sqrt(out[0] ** 2 + out[1] ** 2))
     mlat = np.degrees(mlat)
     mlon = np.arctan2(out[1], out[0])
     mlon = np.degrees(mlon)
     # malt=sqrt(out[0,*]^2+out[1,*]^2+out[2,*]^2)-R
 
-    return mlat, mlon
+    return mlat.reshape(glat_shape), mlon.reshape(glon_shape)
 
 
 if __name__ == "__main__":

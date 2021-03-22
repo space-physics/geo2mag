@@ -1,7 +1,5 @@
 # Geographic &harr; Geomagnetic Coordinate Conversion
 
-[![Build Status](https://travis-ci.org/space-physics/igrfcoord.svg?branch=master)](https://travis-ci.org/space-physics/igrfcoord)
-
 Convert geodetic coordinates to geomagnetic coordinates, using the UNENCRYPTED
 connection to IGRF web service:
 http://wdc.kugi.kyoto-u.ac.jp/igrf/gggm/index.html
